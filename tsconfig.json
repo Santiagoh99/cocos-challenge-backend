@@ -4,11 +4,7 @@
     "moduleResolution": "nodenext",
     "target": "ES2023",
     "lib": ["ES2023"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "sourceMap": true,
-    "declaration": false,
-    "removeComments": true,
+    "rootDir": ".",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strict": true,
@@ -22,9 +18,10 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "incremental": true,
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "noEmit": true,
+    "types": ["node", "jest"],
+    "isolatedModules": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "test"]
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
