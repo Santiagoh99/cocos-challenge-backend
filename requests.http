@@ -1,0 +1,134 @@
+@baseUrl = http://localhost:3000
+@json = application/json
+
+### Portfolio - usuario con órdenes
+GET {{baseUrl}}/users/1/portfolio
+
+### Portfolio - usuario sin órdenes
+GET {{baseUrl}}/users/2/portfolio
+
+### Portfolio - usuario inexistente (404)
+GET {{baseUrl}}/users/999/portfolio
+
+### Búsqueda por ticker
+GET {{baseUrl}}/instruments?search=pamp
+
+### Búsqueda por nombre con límite
+GET {{baseUrl}}/instruments?search=banco&limit=2
+
+### Búsqueda de instrumento sin precio
+GET {{baseUrl}}/instruments?search=PGR
+
+### Orden MARKET de compra por cantidad
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "size": 10
+}
+
+### Orden MARKET de compra por monto
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "amount": 10000
+}
+
+### Orden MARKET de venta
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 54,
+  "side": "SELL",
+  "type": "MARKET",
+  "size": 100
+}
+
+### Orden LIMIT de compra
+# @name limitOrder
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 45,
+  "side": "BUY",
+  "type": "LIMIT",
+  "size": 20,
+  "price": 700.5
+}
+
+### Cancelar la orden LIMIT anterior
+PATCH {{baseUrl}}/orders/{{limitOrder.response.body.id}}/cancel
+Content-Type: {{json}}
+
+{
+  "userId": 1
+}
+
+### Orden rechazada por fondos insuficientes (201, REJECTED)
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "size": 100000
+}
+
+### Orden rechazada por acciones insuficientes (201, REJECTED)
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 54,
+  "side": "SELL",
+  "type": "MARKET",
+  "size": 10000
+}
+
+### LIMIT sin precio (400)
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 45,
+  "side": "BUY",
+  "type": "LIMIT",
+  "size": 1
+}
+
+### Operar ARS (400)
+POST {{baseUrl}}/orders
+Content-Type: {{json}}
+
+{
+  "userId": 1,
+  "instrumentId": 66,
+  "side": "BUY",
+  "type": "MARKET",
+  "size": 1
+}
+
+### Cancelar una orden FILLED (409)
+PATCH {{baseUrl}}/orders/2/cancel
+Content-Type: {{json}}
+
+{
+  "userId": 1
+}

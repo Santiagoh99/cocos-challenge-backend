@@ -1,0 +1,640 @@
+{
+  "info": {
+    "name": "Cocos Challenge Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "limitOrderId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Portfolio",
+      "item": [
+        {
+          "name": "Portfolio - usuario con órdenes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/1/portfolio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                "portfolio"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Portfolio - usuario sin órdenes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/2/portfolio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "2",
+                "portfolio"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Portfolio - usuario inexistente (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/999/portfolio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "999",
+                "portfolio"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Instrumentos",
+      "item": [
+        {
+          "name": "Búsqueda por ticker",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/instruments?search=pamp",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instruments"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "pamp"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Búsqueda por nombre con límite",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/instruments?search=banco&limit=2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instruments"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "banco"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Búsqueda de instrumento sin precio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/instruments?search=PGR",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instruments"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "PGR"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Órdenes",
+      "item": [
+        {
+          "name": "Orden MARKET de compra por cantidad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Orden MARKET de compra por monto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"amount\": 10000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Orden MARKET de venta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 54,\n  \"side\": \"SELL\",\n  \"type\": \"MARKET\",\n  \"size\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Orden LIMIT de compra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 45,\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"size\": 20,\n  \"price\": 700.5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"limitOrderId\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar la orden LIMIT anterior",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{limitOrderId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{limitOrderId}}",
+                "cancel"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Orden rechazada por fondos insuficientes (201, REJECTED)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 100000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"status REJECTED\", () => pm.expect(pm.response.json().status).to.eql(\"REJECTED\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Orden rechazada por acciones insuficientes (201, REJECTED)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 54,\n  \"side\": \"SELL\",\n  \"type\": \"MARKET\",\n  \"size\": 10000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"status REJECTED\", () => pm.expect(pm.response.json().status).to.eql(\"REJECTED\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "LIMIT sin precio (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 45,\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"size\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Operar ARS (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 66,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar una orden FILLED (409)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/2/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "2",
+                "cancel"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
