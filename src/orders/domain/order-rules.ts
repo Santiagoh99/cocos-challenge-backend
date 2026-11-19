@@ -1,8 +1,9 @@
 import { InvalidRequestError } from '../../common/errors/domain.errors.js';
+import { MAX_INT4 } from '../../common/limits.js';
 import type { Money } from '../../common/money.js';
 import type { OrderStatus, OrderType } from './order.js';
 
-export const MAX_ORDER_SIZE = 2_147_483_647;
+export const MAX_ORDER_SIZE = MAX_INT4;
 
 export type TradeSide = 'BUY' | 'SELL';
 

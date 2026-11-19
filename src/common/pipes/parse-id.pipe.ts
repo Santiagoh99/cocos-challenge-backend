@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, type PipeTransform } from '@nestjs/common';
-
-const MAX_INT4 = 2_147_483_647;
+import { MAX_INT4 } from '../limits.js';
 
 @Injectable()
 export class ParseIdPipe implements PipeTransform<string, number> {

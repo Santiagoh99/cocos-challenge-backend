@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { InvalidRequestError, NotFoundError } from '../common/errors/domain.errors.js';
+import {
+  ConflictError,
+  InvalidRequestError,
+  NotFoundError,
+} from '../common/errors/domain.errors.js';
 import { formatMoney, money, type Money } from '../common/money.js';
 import { DbService } from '../db/db.service.js';
 import { calculateCash, calculateHoldings } from '../portfolio/domain/ledger.js';
@@ -69,6 +73,22 @@ export class OrdersService {
       });
 
       return toResponse(saved, decision.rejectionReason);
+    });
+  }
+
+  cancelOrder(orderId: number, userId: number): Promise<OrderResponse> {
+    return this.db.transaction(async (tx) => {
+      const order = await this.repository.findOwnedForUpdate(tx, orderId, userId);
+      if (order === null) throw new NotFoundError('Order', orderId);
+      if (order.status !== 'NEW') {
+        throw new ConflictError(
+          'ORDER_NOT_CANCELLABLE',
+          `Only NEW orders can be cancelled, this one is ${order.status}`,
+        );
+      }
+
+      const cancelled = await this.repository.markCancelled(tx, orderId);
+      return toResponse(cancelled, null);
     });
   }
 }

@@ -90,4 +90,26 @@ export class OrdersRepository {
     if (inserted === undefined) throw new Error('Order insert returned no row');
     return inserted;
   }
+
+  async findOwnedForUpdate(
+    tx: Queryable,
+    orderId: number,
+    userId: number,
+  ): Promise<OrderRow | null> {
+    const rows = await tx.query<OrderRow>(
+      `SELECT ${ORDER_COLUMNS} FROM orders WHERE id = $1 AND userid = $2 FOR UPDATE`,
+      [orderId, userId],
+    );
+    return rows[0] ?? null;
+  }
+
+  async markCancelled(tx: Queryable, orderId: number): Promise<OrderRow> {
+    const rows = await tx.query<OrderRow>(
+      `UPDATE orders SET status = 'CANCELLED' WHERE id = $1 RETURNING ${ORDER_COLUMNS}`,
+      [orderId],
+    );
+    const [updated] = rows;
+    if (updated === undefined) throw new Error(`Order ${orderId} disappeared while cancelling`);
+    return updated;
+  }
 }
