@@ -2,13 +2,11 @@ import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { createTestApp } from './helpers/create-app.js';
-import { resetDatabase } from './helpers/test-database.js';
 
 describe('GET /users/:userId/portfolio', () => {
   let app: INestApplication<App>;
 
   beforeAll(async () => {
-    await resetDatabase();
     app = await createTestApp();
   });
 
