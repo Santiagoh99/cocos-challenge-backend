@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validateEnv } from './config/env.validation.js';
 import { DbModule } from './db/db.module.js';
 import { InstrumentsModule } from './instruments/instruments.module.js';
+import { OrdersModule } from './orders/orders.module.js';
 import { PortfolioModule } from './portfolio/portfolio.module.js';
 
 @Module({
@@ -15,6 +16,7 @@ import { PortfolioModule } from './portfolio/portfolio.module.js';
     DbModule,
     InstrumentsModule,
     PortfolioModule,
+    OrdersModule,
   ],
 })
 export class AppModule {}
