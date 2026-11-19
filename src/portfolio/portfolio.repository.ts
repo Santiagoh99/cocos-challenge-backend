@@ -1,14 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service.js';
+import { LEDGER_STATUSES_SQL, type LedgerOrderRow } from './ledger-row.js';
 
-export interface PortfolioOrderRow {
-  id: number;
-  instrumentid: number;
-  side: string;
-  status: string;
-  size: number;
-  price: string;
-  datetime: Date;
+export interface PortfolioOrderRow extends LedgerOrderRow {
   ticker: string;
   name: string;
   close: string | null;
@@ -30,7 +24,7 @@ const ORDERS_WITH_QUOTES_SQL = `
     LIMIT 1
   ) md ON true
   WHERE o.userid = $1
-    AND o.status IN ('FILLED', 'NEW')
+    AND o.status IN ${LEDGER_STATUSES_SQL}
 `;
 
 @Injectable()

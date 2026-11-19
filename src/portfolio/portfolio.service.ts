@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { NotFoundError } from '../common/errors/domain.errors.js';
 import { formatMoney, formatPercent, money, type Money } from '../common/money.js';
 import type { Quote } from '../common/quote.js';
-import { parseOrderSide, parseOrderStatus } from '../orders/domain/order.js';
-import type { LedgerOrder } from './domain/ledger.js';
 import { buildPortfolio, type InstrumentInfo, type Position } from './domain/portfolio.js';
+import { toLedgerOrder } from './ledger-row.js';
 import { PortfolioRepository, type PortfolioOrderRow } from './portfolio.repository.js';
 
 export interface PositionResponse {
@@ -52,18 +51,6 @@ export class PortfolioService {
       positions: portfolio.positions.map(toPositionResponse),
     };
   }
-}
-
-function toLedgerOrder(row: PortfolioOrderRow): LedgerOrder {
-  return {
-    id: row.id,
-    instrumentId: row.instrumentid,
-    side: parseOrderSide(row.side),
-    status: parseOrderStatus(row.status),
-    size: row.size,
-    price: money(row.price),
-    createdAt: row.datetime,
-  };
 }
 
 function quotesFrom(rows: readonly PortfolioOrderRow[]): Map<number, Quote> {
