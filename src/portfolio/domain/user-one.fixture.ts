@@ -1,7 +1,8 @@
 import { money } from '../../common/money.js';
 import type { OrderSide, OrderStatus } from '../../orders/domain/order.js';
 import type { LedgerOrder } from './ledger.js';
-import type { InstrumentInfo, Quote } from './portfolio.js';
+import type { Quote } from '../../common/quote.js';
+import type { InstrumentInfo } from './portfolio.js';
 
 type Row = [number, number, number, number, OrderSide, OrderStatus, string];
 

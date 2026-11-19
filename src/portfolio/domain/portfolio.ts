@@ -1,4 +1,5 @@
 import { type Money, sum } from '../../common/money.js';
+import { dailyReturn, type Quote } from '../../common/quote.js';
 import {
   averageCost,
   calculateCash,
@@ -7,11 +8,6 @@ import {
   type Holding,
   type LedgerOrder,
 } from './ledger.js';
-
-export interface Quote {
-  close: Money;
-  previousClose: Money;
-}
 
 export interface InstrumentInfo {
   id: number;
@@ -82,9 +78,4 @@ function valuePosition(
 function totalReturn(marketValue: Money | null, costBasis: Money): Money | null {
   if (marketValue === null || costBasis.isZero()) return null;
   return marketValue.dividedBy(costBasis).minus(1);
-}
-
-function dailyReturn(quote: Quote): Money | null {
-  if (quote.previousClose.isZero()) return null;
-  return quote.close.dividedBy(quote.previousClose).minus(1);
 }
