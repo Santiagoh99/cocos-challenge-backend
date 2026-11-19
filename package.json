@@ -1,6 +1,6 @@
 {
   "name": "cocos-challenge-backend",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "license": "UNLICENSED",
   "engines": {
@@ -14,7 +14,11 @@
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "format": "prettier --write \"{src,test}/**/*.ts\"",
     "format:check": "prettier --check \"{src,test}/**/*.ts\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch",
+    "test:cov": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
+    "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config test/jest-e2e.config.js --runInBand"
   },
   "dependencies": {
     "@nestjs/common": "^12.5.1",
@@ -23,6 +27,8 @@
     "@nestjs/platform-express": "^12.5.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "decimal.js": "^10.6.0",
+    "helmet": "^8.3.0",
     "pg": "^8.23.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
@@ -30,13 +36,28 @@
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@nestjs/cli": "^12.0.13",
+    "@nestjs/testing": "^12.5.1",
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
+    "jest": "^30.5.2",
     "prettier": "^3.10.1",
+    "supertest": "^7.3.2",
+    "ts-jest": "^29.4.15",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.73.0"
+  },
+  "overrides": {
+    "glob": "^14.0.6",
+    "test-exclude": {
+      "minimatch": "^11.0.5"
+    }
+  },
+  "allowScripts": {
+    "@parcel/watcher": false
   }
 }
